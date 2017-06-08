@@ -12,30 +12,35 @@ import numpy as np
 acess_key = 'AKIAINUJU5KTWE3LAIGQ'
 secret_key = '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'
 customer_tag = 'harsha10d-21'
-prodName = ''
     
-def initialize(prodId,prodName):
+def initialize(prodId):
         
     
     amzn = AmazonScraper(acess_key,secret_key,customer_tag,Region='IN')
     p = amzn.lookup(ItemId=prodId)
-    rs = p.reviews()
-    all_on_page = list(rs)
+    rs = amzn.reviews(ItemId=prodId)
     reviews,reviews_title = [],[]
-    for r in all_on_page:
+    i = 1
+    for r in rs:
         fr = r.full_review()
+        print_review(fr.title,fr.text,i)
         reviews.append(fr.text)
         reviews_title.append(fr.title)
-    return reviews,reviews_title
+        i += 1 
+    prodName = p.title
+    for x in range(len(prodName)):
+        string = list(prodName)
+        if string[x] == '.' or string[x] == '/' : string[x] = '-'
+        prodName = ''.join(string)
+    return reviews,reviews_title,prodName
     
-def printAll(reviews,reviews_title):
-    for i in range(len(reviews)):
-        print('Review : %d'%(i+1))
-        print('Title : %s'%reviews_title[i])
-        print('Content : %s'%reviews[i])
-        print('***--------------***') 
+def print_review(tt,tx,i):
+    print('Review : %d'%(i))
+    print('Title : %s'%tt)
+    print('Content : %s'%tx)
+    print('***--------------***') 
             
-def doSentiment(reviews,reviews_title):
+def doSentiment(reviews,reviews_title,prodName):
         
     i = 1
     x_points = []
@@ -68,6 +73,7 @@ def doSentiment(reviews,reviews_title):
     plt.plot(x_points,y)
     plt.xlabel('Review number')
     plt.ylabel('Polarity')
+    prodName = prodName.replace("/","-")
     plt.savefig(prodName)
     plt.show()
             
