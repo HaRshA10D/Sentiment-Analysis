@@ -10,7 +10,7 @@ from textblob import TextBlob
 import numpy as np
     
 acess_key = 'AKIAINUJU5KTWE3LAIGQ'
-secret_key = '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'
+secret_key = 'XXXXXXXXXXXXXXXXXXXXXX'
 customer_tag = 'harsha10d-21'
     
 def initialize(prodId):
